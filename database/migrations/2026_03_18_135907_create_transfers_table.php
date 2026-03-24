@@ -13,22 +13,15 @@ return new class extends Migration
     {
         Schema::create('transfers', function (Blueprint $table) {
             $table->id();
-
-            $table->integer('sender_account_id');
-            $table->integer('receiver_account_id');
+            $table->foreignId('sender_account_id')->constrained('accounts')->cascadeOnDelete();
+            $table->foreignId('receiver_account_id')->constrained('accounts')->cascadeOnDelete();
 
             $table->decimal('amount', 10, 2);
-
-            $table->enum('status', ['PENDING', 'COMPLETED', 'FAILED'])->default('PENDING');
-
+            $table->enum('status', ['Pending', 'Completed', 'Failed'])->default('Pending');
             $table->text('reason_failed')->nullable();
-            $table->integer('initiated_by_user_id')->nullable();
+            $table->foreignId('initiated_by_user_id')->nullable()->constrained('users')->nullOnDelete();
 
             $table->timestamps();
-
-            $table->foreign('sender_account_id')->references('id')->on('accounts')->onDelete('cascade');
-            $table->foreign('receiver_account_id')->references('id')->on('accounts')->onDelete('cascade');
-            $table->foreign('initiated_by_user_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 

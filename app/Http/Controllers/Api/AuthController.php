@@ -29,7 +29,7 @@ class AuthController extends Controller
     {
         $reqValData = $request->validated();
 
-        if (!$token = Auth::attempt($reqValData)) {
+        if (!$token = auth()->attempt($reqValData)) {
             return response()->json([
                 'status' => 'Error',
                 'message' => 'Invalid credentials',
