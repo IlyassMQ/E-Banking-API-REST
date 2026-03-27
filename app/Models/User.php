@@ -24,6 +24,9 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'phone_number',
+        'role',
+        'birth_date'
     ];
 
     /**
@@ -46,6 +49,7 @@ class User extends Authenticatable implements JWTSubject
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'birth_date' => 'date',
         ];
     }
 
@@ -57,5 +61,23 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+
+    public function accounts()
+    {
+        return $this->belongsToMany(Account::class, 'account_users')->withPivot('is_guardian', 'accepted_closure')
+        ->withTimestamps();
+    }
+
+    public function guardianAccounts()
+    {
+        return $this->belongsToMany(Account::class, 'account_users')->wherePivot('is_guardian', 1)
+        ->withTimestamps();
+    }
+
+    public function transfers()
+    {
+        return $this->hasMany(Transfer::class, 'initiated_by_user_id');
     }
 }
