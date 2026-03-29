@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\TransferController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
@@ -21,5 +22,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/accounts/{id}', [AccountController::class, 'show']);    
     Route::post('/accounts/{id}/co-owner', [AccountController::class, 'addCoOwner']);    
     Route::patch('/accounts/{id}/close', [AccountController::class, 'close']);
+    Route::post('/transfers', [TransferController::class, 'store']);
+    
     
 });
